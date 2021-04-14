@@ -71,14 +71,6 @@
     <dependencies>
         <dependency>
             <groupId>com.backbase.buildingblocks</groupId>
-            <artifactId>multi-tenancy-liquibase</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.backbase.buildingblocks</groupId>
             <artifactId>events</artifactId>
         </dependency>
         <dependency>
@@ -94,8 +86,9 @@
             <artifactId>communication</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.backbase.buildingblocks</groupId>
-            <artifactId>persistence</artifactId>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.12</version>
         </dependency>
         <dependency>
             <groupId>com.backbase.buildingblocks</groupId>

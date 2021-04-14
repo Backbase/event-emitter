@@ -1,0 +1,16 @@
+server:
+  port: 8079
+spring:
+  application:
+    name: event-emitter
+  cloud:
+    stream:
+      default-binder: activemq
+  liquibase:
+    enabled: false
+backbase:
+  events:
+    enabled: true
+  security:
+    public:
+      paths: /events/*
