@@ -12,3 +12,6 @@ backbase:
   security:
     public:
       paths: /events/*
+logging:
+  level:
+    org.springframework.web: DEBUG
