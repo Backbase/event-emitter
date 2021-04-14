@@ -9,8 +9,6 @@ spring:
   liquibase:
     enabled: false
 backbase:
-  events:
-    enabled: true
   security:
     public:
       paths: /events/*
