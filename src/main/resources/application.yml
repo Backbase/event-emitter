@@ -14,4 +14,18 @@ backbase:
       paths: /events/*
 logging:
   level:
-    org.springframework.web: DEBUG
+    com:
+      netflix:
+        discovery: OFF
+
+# The below config is an example of how to enable SCS bindings actuator endpoint which is disabled by default on SSDK
+management:
+  endpoint:
+    bindings:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include:
+          - bindings
+          - health
