@@ -1,0 +1,6 @@
+spring:
+  cloud:
+    stream:
+      default-binder: kafka
+  kafka:
+    bootstrap-servers: ${kafka.host:UAIEV8759NBM.LEVI9.COM}:29092
