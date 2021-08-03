@@ -1,6 +1,6 @@
 package com.backbase.eo.testing.events;
 
-import com.backbase.buildingblocks.backend.communication.event.EnvelopedEvent;
+import  com.backbase.buildingblocks.backend.communication.event.EnvelopedEvent;
 import com.backbase.buildingblocks.backend.communication.event.proxy.EventBus;
 import com.backbase.buildingblocks.persistence.model.Event;
 import com.backbase.buildingblocks.presentation.errors.BadRequestException;
@@ -16,13 +16,16 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -31,6 +34,10 @@ public class EventEmittingController {
     private Random random = new Random();
     private final EventBus eventBus;
     private final ObjectMapper mapper;
+
+    private static final int BATCH_SIZE = 10000;
+    private static final int USERS_COUNT = 20;
+
 
     @Autowired
     public EventEmittingController(EventBus eventBus, ObjectMapper mapper) {
@@ -43,6 +50,39 @@ public class EventEmittingController {
         consumes = {MediaType.APPLICATION_JSON_VALUE}
     )
     public void emitEvent(@PathVariable("eventId") String eventId, @Nullable @RequestBody String body) {
+        EnvelopedEvent envelopedEvent = buildEventPayload(eventId, body);
+        eventBus.emitEvent(envelopedEvent);
+    }
+
+    @PostMapping(
+        path="/mass-emit/{eventId}",
+        consumes = {MediaType.APPLICATION_JSON_VALUE}
+    )
+    public void emitMany(@PathVariable("eventId") String eventId, @Nullable @RequestBody String body,
+        @RequestParam(value = "countEvents", defaultValue = "1000") Integer countEvents) throws InterruptedException {
+
+        ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+        threadPoolTaskExecutor.setCorePoolSize(USERS_COUNT);
+        threadPoolTaskExecutor.setQueueCapacity(countEvents);
+        threadPoolTaskExecutor.initialize();
+
+        EnvelopedEvent envelopedEvent = buildEventPayload(eventId, body);
+
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < BATCH_SIZE; i++) {
+            threadPoolTaskExecutor.submit(() -> eventBus.emitEvent(envelopedEvent));
+        }
+        while (threadPoolTaskExecutor.getThreadPoolExecutor().getActiveCount() != 0) {
+            System.err.println("Still working...");
+            TimeUnit.SECONDS.sleep(2);
+        }
+        System.err.println(String.format("Done in %s ms", System.currentTimeMillis() - start));
+
+    }
+
+    private EnvelopedEvent buildEventPayload(
+        @PathVariable("eventId") String eventId,
+        @RequestBody @Nullable String body) {
         Reflections reflections = new Reflections("com.backbase");
         Set<Class<? extends Event>> availableEvents = reflections.getSubTypesOf(Event.class);
 
@@ -51,7 +91,7 @@ public class EventEmittingController {
             .findFirst()
             .flatMap(clazz -> {
                 try {
-                    if(body != null) {
+                    if (body != null) {
                         return Optional.of(mapper.readValue(body, clazz));
                     } else {
                         return Optional.of(createAndFill(clazz));
@@ -63,7 +103,7 @@ public class EventEmittingController {
             }).orElseThrow(() -> new BadRequestException("Unknown event"));
         EnvelopedEvent envelopedEvent = new EnvelopedEvent();
         envelopedEvent.setEvent(testObject);
-        eventBus.emitEvent(envelopedEvent);
+        return envelopedEvent;
     }
 
 
