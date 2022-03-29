@@ -1,0 +1,35 @@
+#!/usr/bin/env groovy
+
+@Library('jenkins-shared-library@latest') l1
+
+pipeline {
+
+    triggers {
+        pollSCM('')
+    }
+
+    agent {
+        label "kaniko"
+    }
+
+    options {
+        disableConcurrentBuilds()
+        timeout(time: 30, unit: 'MINUTES')
+    }
+
+    environment {
+        HARBOR_CREDS = credentials("harbor-credentials")
+    }
+
+    stages {
+        stage('Initialize') {
+            steps {
+                script {
+                    ciSCMCheckout()
+                    metadata = readYaml(file: '.sdlc/config.yaml')
+                }
+            }
+        }
+        // @todo:
+    }
+}

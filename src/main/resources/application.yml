@@ -1,5 +1,6 @@
 server:
-  port: 8079
+  port: 8080
+
 spring:
   application:
     name: event-emitter
@@ -8,12 +9,14 @@ spring:
       default-binder: activemq
   liquibase:
     enabled: false
+
 backbase:
   security:
     public:
       paths:
         - /events/*
         - /mass-emit/*
+
 logging:
   level:
     com:

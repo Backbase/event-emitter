@@ -5,18 +5,14 @@
     <parent>
         <artifactId>service-sdk-starter-core</artifactId>
         <groupId>com.backbase.buildingblocks</groupId>
-        <version>12.2.0</version>
+        <version>14.0.0</version>
     </parent>
 
-    <groupId>com.backbase.ce.testing</groupId>
+    <groupId>com.backbase.testing</groupId>
     <artifactId>event-emitter</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>war</packaging>
-    <name>Backbase :: Customer Engagement :: Testing Components :: Events Emitter</name>
-    <scm>
-        <developerConnection>scm:git:ssh://git@stash.backbase.com:7999/~oleksii/event-emitter.git</developerConnection>
-        <tag>HEAD</tag>
-    </scm>
+    <name>Backbase :: Testing Components :: Events Emitter</name>
 
     <properties>
         <actions-reactive-spec.version>0.2.4</actions-reactive-spec.version>
@@ -100,26 +96,6 @@
                     <groupId>commons-collections</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
-            <version>2.5.12.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-stream-binder-kafka</artifactId>
-            <version>3.0.4.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-stream-binder-kafka-core</artifactId>
-            <version>3.0.4.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka-clients</artifactId>
-            <version>2.5.1</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
@@ -453,45 +429,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>docker-image</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.google.cloud.tools</groupId>
-                        <artifactId>jib-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>websphere-image</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>${docker.jib.goal}</goal>
-                                </goals>
-                                <configuration>
-                                    <skip>${docker.websphere.skip}</skip>
-                                    <from>
-                                        <image>harbor.backbase.eu/external/websphere-liberty:19.0.0.9-javaee8-java11</image>
-                                    </from>
-                                    <to>
-                                        <image>${docker.image.name}:${project.version}-websphere-19</image>
-                                        <tags>latest-websphere-19</tags>
-                                    </to>
-                                    <container>
-                                        <appRoot>/opt/ibm/wlp/usr/servers/defaultServer/apps/root.war/</appRoot>
-                                        <entrypoint>
-                                            <![CDATA[sh,-c, printenv > /config/server.env && echo '<?xml version="1.0" encoding="UTF-8"?><server description="defaultServer">\n<featureManager><feature>javaee-8.0</feature></featureManager><httpEndpoint host="*" httpPort="8080" httpsPort="8443" id="defaultHttpEndpoint" /><webApplication contextRoot="/" location="root.war" /></server>' > /config/server.xml && /opt/ibm/wlp/bin/installUtility install defaultServer && /opt/ibm/helpers/runtime/docker-server.sh /opt/ibm/wlp/bin/server run defaultServer]]>
-                                        </entrypoint>
-                                        <user>root</user>
-                                    </container>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
 </project>
