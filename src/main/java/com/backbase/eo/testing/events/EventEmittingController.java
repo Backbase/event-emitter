@@ -18,6 +18,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
+
+import lombok.RequiredArgsConstructor;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -29,21 +31,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 public class EventEmittingController {
 
-    private Random random = new Random();
     private final EventBus eventBus;
     private final ObjectMapper mapper;
 
     private static final int BATCH_SIZE = 10000;
     private static final int USERS_COUNT = 20;
-
-
-    @Autowired
-    public EventEmittingController(EventBus eventBus, ObjectMapper mapper) {
-        this.eventBus = eventBus;
-        this.mapper = mapper;
-    }
+    private static final Random random = new Random();
 
     @PostMapping(
         path="/events/{eventId}",
