@@ -17,6 +17,14 @@ backbase:
         - /events/*
         - /mass-emit/*
 
+eureka:
+  instance:
+    appname: ${spring.application.name}
+    preferIpAddress: true
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    metadataMap:
+      public: true
+
 logging:
   level:
     com:
