@@ -69,7 +69,7 @@ curl --location --request POST 'http://localhost:8079/events/com.backbase.transa
 Want to contribute to the code? Please take a moment to read our [Contributing](CONTRIBUTING.md) guide to learn about our development process.
 
 [docker-url]: https://harbor.backbase.eu/harbor/projects/3/repositories/event-emitter
-[docker-image]: https://img.shields.io/badge/docker-harbor.backbase.eu%2Fdevelopment%2Fevent--emitter%3A2022.04-blue
+[docker-image]: https://img.shields.io/badge/docker-harbor.backbase.eu%2Fdevelopment%2Fevent--emitter%3A1.1.0-blue
 
 [commit-url]: https://conventionalcommits.org
 [commit-image]: https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg
