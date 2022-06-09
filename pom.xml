@@ -10,17 +10,17 @@
 
     <groupId>com.backbase.testing</groupId>
     <artifactId>event-emitter</artifactId>
-    <version>1.2.0-SNAPSHOT</version>
+    <version>1.3.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Backbase :: Testing Components :: Events Emitter</name>
 
     <properties>
-        <actions-reactive-spec.version>0.2.4</actions-reactive-spec.version>
+        <actions-reactive-spec.version>0.3.2</actions-reactive-spec.version>
 
         <!--EVENTS-->
         <transaction-management.version>1.114</transaction-management.version>
         <limit.version>1.0.48</limit.version>
-        <messages-service.version>1.1.232</messages-service.version>
+        <messages-service.version>1.1.234</messages-service.version>
         <approval-service.version>1.2.59</approval-service.version>
         <financial-insights.version>1.61</financial-insights.version>
         <payment-order-service.version>1.3.92</payment-order-service.version>
@@ -202,7 +202,8 @@
                                     <groupId>com.backbase.dbs.actions</groupId>
                                     <artifactId>actions-reactive-spec</artifactId>
                                     <version>${actions-reactive-spec.version}</version>
-                                    <type>jar</type>
+                                    <type>zip</type>
+                                    <classifier>events</classifier>
                                     <outputDirectory>target/unpacked-specs/actions-reactive-spec</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
@@ -294,7 +295,7 @@
                         </goals>
                         <configuration>
                             <outputFile>target/generated-sources/</outputFile>
-                            <inputFile>target/unpacked-specs/actions-reactive-spec/events</inputFile>
+                            <inputFile>target/unpacked-specs/actions-reactive-spec</inputFile>
                             <packageName>dbs.actions.reactive</packageName>
                             <packageVersion>2</packageVersion>
                         </configuration>
@@ -429,5 +430,19 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <id>backbase.artifacts.repository</id>
+            <url>https://artifacts.backbase.com/dependencies</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>backbase.artifacts.repository</id>
+            <url>https://artifacts.backbase.com/dependencies</url>
+        </pluginRepository>
+    </pluginRepositories>
 
 </project>
