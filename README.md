@@ -73,3 +73,9 @@ Want to contribute to the code? Please take a moment to read our [Contributing](
 
 [commit-url]: https://conventionalcommits.org
 [commit-image]: https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg
+
+## Build docker image
+
+```
+mvn package -Dmaven.test.skip.exec=true -P docker-image -Ddocker.repo.project=development -Ddocker.distroless.image=gcr.io/distroless/java17-debian11 -Ddocker.default.tag=2022.06.21-java17 -Djib.to.tags=2022.06.21-java17
+```
