@@ -65,6 +65,17 @@ curl --location --request POST 'http://localhost:8079/events/com.backbase.transa
 }'
 ```
 
+```shell
+curl --location --request POST 'http://localhost:8079/events/com.backbase.audit.persistence.event.spec.v1.AuditExportCompletedEvent' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "status": "successful",
+    "userId": "19aa3423-4bc3-4624-bbbf-75064a441b44", 
+    "link": "https://www.google.com/",
+    "serviceAgreementId": "35494cc7-3266-11ec-ae7c-ce5ec8981a97"
+}'
+```
+
 ## Contributing
 Want to contribute to the code? Please take a moment to read our [Contributing](CONTRIBUTING.md) guide to learn about our development process.
 
