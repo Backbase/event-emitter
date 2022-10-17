@@ -76,6 +76,17 @@ curl --location --request POST 'http://localhost:8079/events/com.backbase.audit.
 }'
 ```
 
+```shell
+curl --location --request POST 'http://localhost:8079/events/com.backbase.account.statement.event.spec.v1.AccountStatementReadyEvent' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "userId": "19aa3423-4bc3-4624-bbbf-75064a441b44",
+    "arrangementId": "f48beab9-8229-11ec-8b7b-0242ac190005",
+    "date": "2022-10-17T12:00:00Z",
+    "serviceAgreementId": "35494cc7-3266-11ec-ae7c-ce5ec8981a97"
+}'
+```
+
 ## Contributing
 Want to contribute to the code? Please take a moment to read our [Contributing](CONTRIBUTING.md) guide to learn about our development process.
 
