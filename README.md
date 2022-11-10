@@ -87,6 +87,29 @@ curl --location --request POST 'http://localhost:8079/events/com.backbase.accoun
 }'
 ```
 
+## Event Consumer
+
+Event Consumer allows you to subscribe and consume events, store them in in-memory storage and retrieve via REST API.
+
+Example of configuration to enable listening to a ActiveMQ:
+```
+backbase.event-emitter.trigger-events: Backbase.communication.push-low-priority,Backbase.communication.push-medium-priority,Backbase.communication.push-medium-priority,Backbase.communication.notifications-low-priority,Backbase.communication.notifications-medium-priority,Backbase.communication.notifications-high-priority,Backbase.communication.message-center-low-priority,Backbase.communication.message-center-medium-priority,Backbase.communication.message-center-high-priority,Backbase.communication.sms-low-priority,Backbase.communication.sms-medium-priority,Backbase.communication.sms-high-priority,Backbase.communication.email-low-priority,Backbase.communication.email-medium-priority,Backbase.communication.email-high-priority
+```
+
+### APIs
+- Get all events
+```
+GET /events
+```
+- Get event by correlation id
+```
+GET /events/<correlationId>
+```
+- Delete all events (from internal memory storage)
+```
+DELETE /events
+```
+
 ## Contributing
 Want to contribute to the code? Please take a moment to read our [Contributing](CONTRIBUTING.md) guide to learn about our development process.
 
