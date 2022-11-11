@@ -18,7 +18,7 @@ public class EventConsumer {
     private final EventStorage eventStorage;
 
     @Bean
-    public Consumer<Message<Map<String, Object>>> resolveCommunicationServiceEvent() {
+    public Consumer<Message<Map<String, Object>>> consumeEvent() {
         return eventMessage -> {
             var correlationId = Optional.ofNullable((String) eventMessage.getHeaders().get("bbRequestUUID")).orElse(UUID.randomUUID().toString());
             eventStorage.addEvent(correlationId, eventMessage);

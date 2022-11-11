@@ -20,7 +20,7 @@ spring:
     stream:
       default-binder: activemq
       bindings:
-        resolveCommunicationServiceEvent-in-0:
+        consumeEvent-in-0:
           destination: ${backbase.event-emitter.trigger-events}
   liquibase:
     enabled: false
