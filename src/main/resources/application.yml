@@ -3,8 +3,8 @@ server:
 
 backbase:
   event-emitter:
-    #comma-separated list of event class name to process those trigger events.
-    trigger-events:
+    #comma-separated list of topic names
+    topic-names:
     # E.G.# Backbase.communication.push-low-priority,Backbase.communication.push-medium-priority,Backbase.communication.push-medium-priority,Backbase.communication.notifications-low-priority,Backbase.communication.notifications-medium-priority,Backbase.communication.notifications-high-priority,Backbase.communication.message-center-low-priority,Backbase.communication.message-center-medium-priority,Backbase.communication.message-center-high-priority,Backbase.communication.sms-low-priority,Backbase.communication.sms-medium-priority,Backbase.communication.sms-high-priority,Backbase.communication.email-low-priority,Backbase.communication.email-medium-priority,Backbase.communication.email-high-priority
   security:
     public:
@@ -21,7 +21,7 @@ spring:
       default-binder: activemq
       bindings:
         consumeEvent-in-0:
-          destination: ${backbase.event-emitter.trigger-events}
+          destination: ${backbase.event-emitter.topic-names}
   liquibase:
     enabled: false
 
