@@ -1,4 +1,4 @@
-package com.backbase.eo.testing.events;
+package com.backbase.eo.testing.events.emitter;
 
 import  com.backbase.buildingblocks.backend.communication.event.EnvelopedEvent;
 import com.backbase.buildingblocks.backend.communication.event.proxy.EventBus;
@@ -21,7 +21,6 @@ import javax.annotation.Nullable;
 
 import lombok.RequiredArgsConstructor;
 import org.reflections.Reflections;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.PathVariable;
