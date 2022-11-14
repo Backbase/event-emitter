@@ -34,7 +34,7 @@
         <camel-version>2.22.0</camel-version>
         <mapstruct.version>1.3.1.Final</mapstruct.version>
         <org-quartz.version>2.3.2</org-quartz.version>
-        <log4j.version>2.13.2</log4j.version>
+        <log4j.version>2.17.1</log4j.version>
         <velocity-tools-generic.version>3.0</velocity-tools-generic.version>
         <velocity-engine-core.version>2.1</velocity-engine-core.version>
         <spring-dbunit.version>1.3.0</spring-dbunit.version>
