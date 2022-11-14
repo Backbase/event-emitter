@@ -339,19 +339,6 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>approval-persistence-events</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>events-generation</goal>
-                        </goals>
-                        <configuration>
-                            <outputFile>target/generated-sources/</outputFile>
-                            <inputFile>target/unpacked-specs/approval</inputFile>
-                            <packageName>dbs.approval.persistence</packageName>
-                            <packageVersion>3</packageVersion>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>payment-persistence-events</id>
                         <phase>generate-sources</phase>
                         <goals>
@@ -417,19 +404,6 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>user-context-events</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>events-generation</goal>
-                        </goals>
-                        <configuration>
-                            <outputFile>target/generated-sources/</outputFile>
-                            <inputFile>target/unpacked-specs/access-control/</inputFile>
-                            <packageName>pandp.accesscontrol</packageName>
-                            <packageVersion>1</packageVersion>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>audit-events</id>
                         <phase>generate-sources</phase>
                         <goals>
@@ -439,32 +413,6 @@
                             <outputFile>target/generated-sources/</outputFile>
                             <inputFile>target/unpacked-specs/audit-spec/events</inputFile>
                             <packageName>audit.persistence</packageName>
-                            <packageVersion>1</packageVersion>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>user-segments-collector-events</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>events-generation</goal>
-                        </goals>
-                        <configuration>
-                            <outputFile>target/generated-sources/</outputFile>
-                            <inputFile>target/unpacked-specs/user-segments-collector-spec</inputFile>
-                            <packageName>usersegment.collector</packageName>
-                            <packageVersion>1</packageVersion>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>account-statement-events</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>events-generation</goal>
-                        </goals>
-                        <configuration>
-                            <outputFile>target/generated-sources/</outputFile>
-                            <inputFile>target/unpacked-specs/account-statement</inputFile>
-                            <packageName>account.statement</packageName>
                             <packageVersion>1</packageVersion>
                         </configuration>
                     </execution>
