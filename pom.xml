@@ -15,25 +15,21 @@
     <name>Backbase :: Testing Components :: Events Emitter</name>
 
     <properties>
-        <actions-reactive-spec.version>0.3.2</actions-reactive-spec.version>
+        <action-service.version>1.1.5</action-service.version>
 
         <!--EVENTS-->
         <transaction-management.version>1.114</transaction-management.version>
         <limit.version>1.0.48</limit.version>
         <messages-service.version>1.2.12</messages-service.version>
-        <approval-service.version>1.2.59</approval-service.version>
         <financial-insights.version>1.61</financial-insights.version>
         <payment-order-service.version>1.3.92</payment-order-service.version>
-        <contact-manager.version>1.2.45</contact-manager.version>
+        <contact-manager.version>2.0.6</contact-manager.version>
         <pocket-tailor.version>0.5</pocket-tailor.version>
-        <access-control.version>1.8.16</access-control.version>
         <audit-spec-version>1.0.47</audit-spec-version>
-        <user-segments-collector-spec.version>0.12.0-2-beta</user-segments-collector-spec.version>
-        <account-statement-version>2.0.9</account-statement-version>
 
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <api.target>${project.build.directory}/downloaded-api</api.target>
-        <specs.repo.url>https://artifacts.backbase.com/specs/</specs.repo.url>
+        <specs.repo.url>https://repo.backbase.com/specs/</specs.repo.url>
         <json-path-assert.version>2.2.0</json-path-assert.version>
         <camel-version>2.22.0</camel-version>
         <mapstruct.version>1.3.1.Final</mapstruct.version>
@@ -225,8 +221,8 @@
                                 <!--EVENTS-->
                                 <artifactItem>
                                     <groupId>com.backbase.dbs.actions</groupId>
-                                    <artifactId>actions-reactive-spec</artifactId>
-                                    <version>${actions-reactive-spec.version}</version>
+                                    <artifactId>action-service</artifactId>
+                                    <version>${action-service.version}</version>
                                     <type>zip</type>
                                     <classifier>events</classifier>
                                     <outputDirectory>target/unpacked-specs/actions-reactive-spec</outputDirectory>
@@ -246,14 +242,6 @@
                                     <type>zip</type>
                                     <classifier>events</classifier>
                                     <outputDirectory>target/unpacked-specs/transaction</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>com.backbase.dbs.approval</groupId>
-                                    <artifactId>approval-service</artifactId>
-                                    <version>${approval-service.version}</version>
-                                    <type>zip</type>
-                                    <classifier>events</classifier>
-                                    <outputDirectory>target/unpacked-specs/approval</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>com.backbase.dbs.paymentorder</groupId>
@@ -296,35 +284,11 @@
                                     <outputDirectory>target/unpacked-specs/pocket-tailor</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
-                                    <groupId>com.backbase.dbs.accesscontrol</groupId>
-                                    <artifactId>access-control</artifactId>
-                                    <type>zip</type>
-                                    <version>${access-control.version}</version>
-                                    <classifier>events</classifier>
-                                    <outputDirectory>target/unpacked-specs/access-control</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
                                     <groupId>com.backbase.dbs.audit</groupId>
                                     <artifactId>audit-spec</artifactId>
                                     <type>jar</type>
                                     <version>${audit-spec-version}</version>
                                     <outputDirectory>target/unpacked-specs/audit-spec</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>com.backbase.usersegment.collector</groupId>
-                                    <artifactId>user-segments-collector</artifactId>
-                                    <type>zip</type>
-                                    <classifier>events</classifier>
-                                    <version>${user-segments-collector-spec.version}</version>
-                                    <outputDirectory>target/unpacked-specs/user-segments-collector-spec</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>com.backbase.dbs.account</groupId>
-                                    <artifactId>account-statement</artifactId>
-                                    <type>zip</type>
-                                    <version>${account-statement-version}</version>
-                                    <classifier>events</classifier>
-                                    <outputDirectory>target/unpacked-specs/account-statement</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
@@ -517,19 +481,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <repositories>
-        <repository>
-            <id>backbase.artifacts.repository</id>
-            <url>https://artifacts.backbase.com/dependencies</url>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>backbase.artifacts.repository</id>
-            <url>https://artifacts.backbase.com/dependencies</url>
-        </pluginRepository>
-    </pluginRepositories>
-
 </project>

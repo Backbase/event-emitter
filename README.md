@@ -1,7 +1,27 @@
-![](logo.svg)
+<p align="center">
+  <img width="120" src="Backbase.png?raw=true" alt="Backbase Logo">
+</p>
 
-[![Docker][docker-image]][docker-url]
-[![Conventional Commit][commit-image]][commit-url]
+<p align="center">
+Event emitter allows you to produce events using REST to the underlying message broker. This service is used for testing purposes only.
+<p>
+
+<p align="center"> 
+    <a href="https://github.com/backbase/event-emitter/actions/workflows/main.yml">
+        <img src="https://github.com/backbase/event-emitter/actions/workflows/main.yml/badge.svg" alt="Build" />
+    </a>
+    <a href="https://sonarcloud.io/summary/new_code?id=Backbase_event-emitter">
+        <img src="https://sonarcloud.io/api/project_badges/measure?project=Backbase_event-emitter&metric=alert_status" alt="Quality Gate" />
+    </a>
+    <a href="https://sonarcloud.io/summary/new_code?id=Backbase_event-emitter">
+        <img src="https://sonarcloud.io/api/project_badges/measure?project=Backbase_event-emitter&metric=sqale_rating" alt="Maintainability Rating" />
+    </a>
+    <a href="https://conventionalcommits.org">
+        <img src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg" alt="Conventional Commits" />
+    </a>
+</p>
+
+---
 
 ## Event Emitter
 
@@ -23,7 +43,7 @@ curl --location --request POST 'http://localhost:8079/events/com.backbase.dbs.me
     "important": true,
     "recipientAddress": "email@gmail.com",
     "senderId": "sender_id",
-    "topicName": "tIZVfnGOaMRdnIOFVTOEZMxyVRXPKwBKeKiGPZovIfdOFeRIcQDfgjzIkTOIdhqcbFFbIinoiaflbTsIYicqsOeirXBjPCJCXPzmmYQeXwgzLWHHZoTwoIBCzUJivNzJOsHnQwzckDkXOhXVZTZqyEekfoZPcDQXygpuYbplthQFECFbkrArchkonSYvusYjDawNmCTJGrbNSuEcXSIkqCFUzaYebglLzGKqnYGXnnXAYZLvLuBMhMbzzlBBqZjHVcBKeKmEdjfAfrlEXMkrFsYTajLaMiRJscpKEkXeXJGtapbiclWPsbkQaSMbOBjlwcJQMEeqiHntWfyWqjQfQANIDlCOaTFUKulrRwwPdeiMDVyCvKQbTxxdotgdIuhongaCiPweEPWxobVJuTfVSUzBdIDRvRmMnhpImjwDrQhZbHIgObDyYqZwxcFqAeYHzvrgdoQzPtyUdZJkvFuvrHhRSITEipvVrTvqQgezwBcUpwgNVdsAEEVzVFpHgQxvhARyhvEVIwinRsdeMeNxFEMRQXtICksJMmtqNitGSFyAqaaDOkPDPTjCTFZWbnzmvPjJMPbalFQOPEkdpCCqHEOkfioIJOkHbaiZtEDUHwsubfJDLdqrLsqPUVhBlROmuFeoxdGcUgLjkEUpEVscfoziZDGylDbfczgYXxoKhKPpKammeEGEXldqhdNx",
+    "topicName": "tIZVfnGOaMRdnIOFVTOEZMxyVRXPKwBKeKi...",
     "additionalProperties": {
         "alternativeTopicName": "altname"
     }
@@ -111,16 +131,18 @@ DELETE /events
 ```
 
 ## Contributing
-Want to contribute to the code? Please take a moment to read our [Contributing](CONTRIBUTING.md) guide to learn about our development process.
 
-[docker-url]: https://harbor.backbase.eu/harbor/projects/3/repositories/event-emitter
-[docker-image]: https://img.shields.io/badge/docker-harbor.backbase.eu%2Fdevelopment%2Fevent--emitter%3A1.7.0-blue
+First off, thanks for taking the time to contribute! Contributions are what makes the open-source community such an amazing place to learn, inspire, and create. Any contributions you make will benefit everybody else and are **greatly appreciated**.
 
-[commit-url]: https://conventionalcommits.org
-[commit-image]: https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg
+Please adhere to this project's [code of conduct](CODE_OF_CONDUCT.md). For detailed instructions on repo organization, linting, testing, and other
+steps see our [contributing guidelines](../../../backbase/event-emitter/CONTRIBUTING.md)
 
-## Build docker image
+#### Contributors
 
-```
-mvn package -Dmaven.test.skip.exec=true -P docker-image -Ddocker.repo.project=development -Ddocker.distroless.image=gcr.io/distroless/java17-debian11 -Ddocker.default.tag=2022.06.21-java17 -Djib.to.tags=2022.06.21-java17
-```
+[![](https://contrib.rocks/image?repo=backbase/event-emitter)](https://github.com/backbase/event-emitter/graphs/contributors)
+
+## License
+
+This project is licensed under the **Backbase** license.
+
+See [LICENSE.md](LICENSE.md) for more information.
