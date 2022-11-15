@@ -42,7 +42,6 @@ jobs:
           title: "ci: bump pom snapshot version"
           body: "Bumps pom snapshot version"
           commit-message: "ci: bump pom snapshot version"
-          committer: GitHub <noreply@github.com>
           author: GitHub <noreply@github.com>
           delete-branch: true
           assignees: ${{ github.actor }}
