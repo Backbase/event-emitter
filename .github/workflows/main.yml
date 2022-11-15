@@ -2,9 +2,9 @@ name: Main
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -33,3 +33,19 @@ jobs:
         run: mvn -B verify --file pom.xml
       - name: Maven Dependency Tree Dependency Submission
         uses: advanced-security/maven-dependency-submission-action@v2.0.1
+      - name: Update POM Version
+        run: |
+          mvn org.codehaus.mojo:versions-maven-plugin:2.13.0:set -DnextSnapshot=true -DnextSnapshotIndexToIncrement=2 -DgenerateBackupPoms=false
+      - name: Create Bump Pull Request
+        uses: peter-evans/create-pull-request@v4.2.0
+        with:
+          title: "ci: bump pom snapshot version"
+          body: "Bumps pom snapshot version"
+          commit-message: "ci: bump pom snapshot version"
+          committer: GitHub <noreply@github.com>
+          author: GitHub <noreply@github.com>
+          delete-branch: true
+          assignees: ${{ github.actor }}
+          branch-suffix: short-commit-hash
+          branch: "feature/bump"
+          base: main
