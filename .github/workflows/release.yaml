@@ -7,7 +7,6 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   test:
@@ -59,8 +58,7 @@ jobs:
           restore-keys: ${{ runner.os }}-maven-
       - name: Update POM Version
         run: |
-          echo "New version is: ${GITHUB_REF##*/v}"
-          mvn versions:set -DnewVersion=${GITHUB_REF##*/v} -DgenerateBackupPoms=false -B
+          mvn versions:set -DnewVersion=${GITHUB_REF##*v} -DgenerateBackupPoms=false -B
       - name: Log into registry ${{ env.REGISTRY }}
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v2.1.0
@@ -69,4 +67,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Docker Build
-        run: mvn clean package jib:build -Djib.to.image=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${GITHUB_REF##*/v}
+        run: mvn package -Dmaven.test.skip.exec=true -P docker-image -Djib.to.image=${REGISTRY}/backbase/${GITHUB_REPOSITORY##*/}:${GITHUB_REF##*v}
+      - name: Update POM Version
+        run: |
+          mvn org.codehaus.mojo:versions-maven-plugin:2.13.0:set -DnextSnapshot=true -DnextSnapshotIndexToIncrement=2 -DgenerateBackupPoms=false
+      - name: GIT commit and push all changed files
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -a -m "ci: bump pom snapshot version"
+          git push
