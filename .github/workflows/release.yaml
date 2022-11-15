@@ -70,3 +70,18 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Docker Build
         run: mvn package -Dmaven.test.skip.exec=true -P docker-image -Djib.to.image=${REGISTRY}/backbase/${GITHUB_REPOSITORY##*/}:${GITHUB_REF##*v}
+      - name: Bump POM Version
+        run: |
+          mvn org.codehaus.mojo:versions-maven-plugin:2.13.0:set -DnextSnapshot=true -DnextSnapshotIndexToIncrement=2 -DgenerateBackupPoms=false
+      - name: Create Bump Pull Request
+        uses: peter-evans/create-pull-request@v4.2.0
+        with:
+          title: "ci: bump pom snapshot version"
+          body: "Bumps pom snapshot version"
+          commit-message: "ci: bump pom snapshot version"
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          delete-branch: true
+          assignees: ${{ github.actor }}
+          branch-suffix: short-commit-hash
+          branch: "feature/bump-version"
+          base: main
