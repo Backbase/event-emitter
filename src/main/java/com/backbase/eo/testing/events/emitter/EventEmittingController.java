@@ -1,5 +1,6 @@
 package com.backbase.eo.testing.events.emitter;
 
+import com.backbase.buildingblocks.backend.communication.context.OriginatorContext;
 import  com.backbase.buildingblocks.backend.communication.event.EnvelopedEvent;
 import com.backbase.buildingblocks.backend.communication.event.proxy.EventBus;
 import com.backbase.buildingblocks.persistence.model.Event;
@@ -8,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +28,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,8 +47,12 @@ public class EventEmittingController {
         path="/events/{eventId}",
         consumes = {MediaType.APPLICATION_JSON_VALUE}
     )
-    public void emitEvent(@PathVariable("eventId") String eventId, @Nullable @RequestBody String body) {
-        EnvelopedEvent envelopedEvent = buildEventPayload(eventId, body);
+    public void emitEvent(
+        @PathVariable("eventId") String eventId,
+        @Nullable @RequestBody String body,
+        @RequestHeader(value = "bbRequestUUID", required = false) String bbRequestUUID) {
+
+        EnvelopedEvent envelopedEvent = buildEventPayload(eventId, body, bbRequestUUID);
         eventBus.emitEvent(envelopedEvent);
     }
 
@@ -54,14 +61,15 @@ public class EventEmittingController {
         consumes = {MediaType.APPLICATION_JSON_VALUE}
     )
     public void emitMany(@PathVariable("eventId") String eventId, @Nullable @RequestBody String body,
-        @RequestParam(value = "countEvents", defaultValue = "1000") Integer countEvents) throws InterruptedException {
+        @RequestParam(value = "countEvents", defaultValue = "1000") Integer countEvents,
+        @RequestHeader(value = "bbRequestUUID", required = false) String bbRequestUUID) throws InterruptedException {
 
         ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
         threadPoolTaskExecutor.setCorePoolSize(USERS_COUNT);
         threadPoolTaskExecutor.setQueueCapacity(countEvents);
         threadPoolTaskExecutor.initialize();
 
-        EnvelopedEvent envelopedEvent = buildEventPayload(eventId, body);
+        EnvelopedEvent envelopedEvent = buildEventPayload(eventId, body, bbRequestUUID);
 
         long start = System.currentTimeMillis();
         for (int i = 0; i < BATCH_SIZE; i++) {
@@ -75,11 +83,13 @@ public class EventEmittingController {
 
     }
 
-    private EnvelopedEvent buildEventPayload(
-        @PathVariable("eventId") String eventId,
-        @RequestBody @Nullable String body) {
+    private EnvelopedEvent buildEventPayload(String eventId, String body, String requestUuid) {
         Reflections reflections = new Reflections("com.backbase");
         Set<Class<? extends Event>> availableEvents = reflections.getSubTypesOf(Event.class);
+
+        OriginatorContext originatorContext = new OriginatorContext();
+        originatorContext.setRequestUuid(requestUuid);
+        originatorContext.setCreationTime(Instant.EPOCH.toEpochMilli());
 
         Object testObject = availableEvents.stream()
             .filter(clazz -> clazz.getName().equalsIgnoreCase(eventId))
@@ -96,8 +106,11 @@ public class EventEmittingController {
                     return Optional.empty();
                 }
             }).orElseThrow(() -> new BadRequestException("Unknown event"));
+
         EnvelopedEvent envelopedEvent = new EnvelopedEvent();
+        envelopedEvent.setOriginatorContext(originatorContext);
         envelopedEvent.setEvent(testObject);
+
         return envelopedEvent;
     }
 

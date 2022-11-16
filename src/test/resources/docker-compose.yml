@@ -1,0 +1,3 @@
+services:
+  message-broker:
+    image: symptoma/activemq

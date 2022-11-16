@@ -16,7 +16,6 @@
 
 package com.backbase.eo.testing.events;
 
-import com.backbase.buildingblocks.backend.communication.event.config.SpringCloudStreamEventingAutoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
