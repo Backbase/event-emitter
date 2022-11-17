@@ -1,4 +1,4 @@
-name: Main
+name: Maven Verify
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  maven:
+  verify:
     name: Maven Verify
     uses: backbase/workflows/.github/workflows/maven-verify.yml@main
     secrets:

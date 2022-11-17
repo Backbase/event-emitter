@@ -48,7 +48,7 @@ Here are a few things you can do that will increase the likelihood of your pull 
 - Write a [good commit message][good-commit-message-url].
 
 ## Documentation
-Make sure to update the documentation if needed. The documentation can be found unser `README.md` and `docs/*`.
+Make sure to update the documentation if needed. The documentation can be found under `README.md` and `docs/*`.
 
 ## Submitting Pull Requests
 No Pull Request (PR) is too small! Typos, additional comments in the code,

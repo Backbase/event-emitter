@@ -4,84 +4,18 @@ on:
   release:
     types:
       - published
-
-env:
-  REGISTRY: ghcr.io
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version eg. 1.0.2-beta'
+        required: true
+        type: string
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-      - name: Configure Maven
-        uses: whelk-io/maven-settings-xml-action@v21
-        with:
-          repositories: '[{ "id": "backbase", "url": "https://repo.backbase.com/repo" }]'
-          plugin_repositories: '[{ "id": "backbase-plugins", "url": "https://repo.backbase.com/repo" }]'
-          servers: '[{ "id": "backbase", "username": "${{ secrets.MAVEN_USERNAME }}", "password": "${{ secrets.MAVEN_PASSWORD }}" },{ "id": "backbase-plugins", "username": "${{ secrets.MAVEN_USERNAME }}", "password": "${{ secrets.MAVEN_PASSWORD }}" }]'
-      - name: Cache local Maven repository
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven-
-      - name: Maven Verify
-        run: mvn -B verify --file pom.xml
-
-  publish:
-    runs-on: ubuntu-latest
-    needs: [ test ]
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.head_ref }}
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-      - name: Configure Maven
-        uses: whelk-io/maven-settings-xml-action@v21
-        with:
-          repositories: '[{ "id": "backbase", "url": "https://repo.backbase.com/repo" }]'
-          plugin_repositories: '[{ "id": "backbase-plugins", "url": "https://repo.backbase.com/repo" }]'
-          servers: '[{ "id": "backbase", "username": "${{ secrets.MAVEN_USERNAME }}", "password": "${{ secrets.MAVEN_PASSWORD }}" },{ "id": "backbase-plugins", "username": "${{ secrets.MAVEN_USERNAME }}", "password": "${{ secrets.MAVEN_PASSWORD }}" }]'
-      - name: Cache local Maven repository
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven-
-      - name: Update POM Version
-        run: |
-          mvn versions:set -DnewVersion=${GITHUB_REF##*v} -DgenerateBackupPoms=false -B
-      - name: Log into registry ${{ env.REGISTRY }}
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@v2.1.0
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Docker Build
-        run: mvn package -Dmaven.test.skip.exec=true -P docker-image -Djib.to.image=${REGISTRY}/backbase/${GITHUB_REPOSITORY##*/}:${GITHUB_REF##*v}
-      - name: Bump POM Version
-        run: |
-          mvn org.codehaus.mojo:versions-maven-plugin:2.13.0:set -DnextSnapshot=true -DnextSnapshotIndexToIncrement=2 -DgenerateBackupPoms=false
-      - name: Create Bump Pull Request
-        uses: peter-evans/create-pull-request@v4.2.0
-        with:
-          title: "ci: bump pom snapshot version"
-          body: "Bumps pom snapshot version"
-          commit-message: "ci: bump pom snapshot version"
-          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
-          delete-branch: true
-          assignees: ${{ github.actor }}
-          branch-suffix: short-commit-hash
-          branch: "feature/bump-version"
-          base: main
+  release:
+    name: Docker Release
+    uses: backbase/workflows/.github/workflows/maven-docker-release.yml@main
+    secrets:
+      version: ${{ inputs.version }}
+      maven-username: ${{ secrets.MAVEN_USERNAME }}
+      maven-password: ${{ secrets.MAVEN_PASSWORD }}
