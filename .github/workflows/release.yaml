@@ -1,21 +1,17 @@
-name: Release
+name: Docker Release
 
 on:
   release:
     types:
       - published
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Release version eg. 1.0.2-beta'
-        required: true
-        type: string
 
 jobs:
   release:
     name: Docker Release
     uses: backbase/workflows/.github/workflows/maven-docker-release.yml@main
+    with:
+      version: ${GITHUB_REF##*v}
     secrets:
-      version: ${{ inputs.version }}
+      github-token: ${{ secrets.GITHUB_TOKEN }}
       maven-username: ${{ secrets.MAVEN_USERNAME }}
       maven-password: ${{ secrets.MAVEN_PASSWORD }}
