@@ -7,9 +7,8 @@ backbase:
   security:
     public:
       paths:
-        - /events
-        - /events/*
-        - /mass-emit/*
+        - /events/**
+        - /mass-emit/**
 
 spring:
   application:

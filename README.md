@@ -27,6 +27,28 @@ Event emitter allows you to produce events using REST to the underlying message 
 
 Event emitter allows you to produce events using REST.
 
+### Raw Event
+
+```shell
+curl --location --request POST 'http://localhost:8079/events/raw' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "destination": "Backbase.engagement.ProvisionItem",
+    "eventType": "com.backbase.engagement.provisioning.messaging.dto.ProvisionItemCommand",
+    "body": {
+        "provisionedItem": {
+            "itemUuid": "fdc0db99-8201-402e-b8f4-05fe154d44ba",
+            "itemType": ""
+        },
+        "packageUuid": "86d994da-8907-494e-b579-4bc59cfa08e4",
+        "destination": "",
+        "override": true
+    }
+}'
+```
+
+### Event Spec
+
 ```shell
 curl --location --request POST 'http://localhost:8079/events/com.backbase.dbs.messages.pandp.event.spec.v4.MessageDeliveredEvent' \
 --header 'Content-Type: application/json' \
@@ -135,7 +157,7 @@ DELETE /events
 First off, thanks for taking the time to contribute! Contributions are what makes the open-source community such an amazing place to learn, inspire, and create. Any contributions you make will benefit everybody else and are **greatly appreciated**.
 
 Please adhere to this project's [code of conduct](CODE_OF_CONDUCT.md). For detailed instructions on repo organization, linting, testing, and other
-steps see our [contributing guidelines](../../../backbase/event-emitter/CONTRIBUTING.md)
+steps see our [contributing guidelines](CONTRIBUTING.md)
 
 #### Contributors
 
