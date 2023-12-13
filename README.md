@@ -27,11 +27,31 @@ Event emitter allows you to produce events using REST to the underlying message 
 
 Event emitter allows you to produce events using REST.
 
+
+### Custom Headers Configuration
+
+In order to pass custom headers from HTTP request to Event - you need to configure key-value mapping pairs for such headers:
+
+```yaml
+backbase:
+  event-emitter:
+    custom-header-pairs:
+      - http: X-LOB
+        event: bbLineOfBusiness
+```
+
+The service will filter out the HTTP headers by the `http` field as key and will set the respective values to the Event under the matching `event` key from configuration.
+
+For the listed example, if service receive the HTTP request with header `X-LOB: RETAIL` - this header would be converted added to the event as `bbLineOfBusiness: RETAIL`
+
+If the conversion is not required - please set the same values to `http` and `event`
+
 ### Raw Event
 
 ```shell
 curl --location --request POST 'http://localhost:8079/events/raw' \
 --header 'Content-Type: application/json' \
+--header 'X-LOB: RETAIL' \
 --data-raw '{
     "destination": "Backbase.engagement.ProvisionItem",
     "eventType": "com.backbase.engagement.provisioning.messaging.dto.ProvisionItemCommand",
