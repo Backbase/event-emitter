@@ -83,7 +83,7 @@ class EventEmitterIT {
                     "spring.cloud.stream.bindings.consumeTestEvent-in-0.group=event-emitter",
                     "spring.cloud.stream.bindings.consumeTestEvent-in-0.destination=" + EVENT_DESTINATION,
                     "spring.cloud.stream.function.definition=consumeTestEvent",
-                    "backbase.event-emitter.custom-header-pairs[0].http=X-LOB",
+                    "backbase.event-emitter.custom-header-pairs[0].http=x-lob",
                     "backbase.event-emitter.custom-header-pairs[0].event=bbLineOfBusiness",
                     "backbase.event-emitter.custom-header-pairs[1].http=customerCategory",
                     "backbase.event-emitter.custom-header-pairs[1].event=customerEventCategory")
