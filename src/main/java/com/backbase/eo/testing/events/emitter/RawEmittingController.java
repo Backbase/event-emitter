@@ -69,7 +69,9 @@ public class RawEmittingController {
         eventEmitterConfiguration.getCustomHeaderPairs()
             .stream()
             .filter(customHeaderPairs ->
-                Collections.list(ofNullable(request.getHeaderNames()).orElse(emptyEnumeration())).contains(customHeaderPairs.http()))
+                Collections.list(ofNullable(request.getHeaderNames()).orElse(emptyEnumeration()))
+                    .stream()
+                    .anyMatch(headerNames -> headerNames.equalsIgnoreCase(customHeaderPairs.http())))
             .forEach(customHeaderPairs ->
                 eventMessageBuilder.setHeader(customHeaderPairs.event(), request.getHeader(customHeaderPairs.http())));
 
