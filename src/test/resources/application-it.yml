@@ -4,6 +4,6 @@ spring:
 
 logging:
   level:
-    root: DEBUG
+    root: INFO
     com:
       backbase: DEBUG
