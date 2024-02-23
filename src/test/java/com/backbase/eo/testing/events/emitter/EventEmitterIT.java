@@ -11,6 +11,7 @@ import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 import com.backbase.eo.testing.events.EventEmitter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.ClassRule;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -35,6 +36,7 @@ import java.time.Instant;
 import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
+import org.testcontainers.containers.output.Slf4jLogConsumer;
 
 /**
  * {@link EventEmitterIT}
@@ -49,6 +51,7 @@ import java.util.UUID;
 @ActiveProfiles({"default", "it"})
 @SpringBootTest(classes = {EventEmitter.class, TestEventConsumerConfiguration.class})
 @ContextConfiguration(classes = {EventEmitter.class, TestEventConsumerConfiguration.class}, initializers = {EventEmitterIT.Initializer.class})
+@Slf4j
 class EventEmitterIT {
 
     @Autowired
@@ -62,7 +65,8 @@ class EventEmitterIT {
     @ClassRule
     public static DockerComposeContainer environment = new DockerComposeContainer(
         new File("src/test/resources/docker-compose.yml"))
-        .withExposedService("message-broker", 61616);
+        .withExposedService("message-broker", 61616)
+        .withLogConsumer("message-broker", new Slf4jLogConsumer(log));
 
     @BeforeAll
     public static void envSetup() {
@@ -82,7 +86,7 @@ class EventEmitterIT {
                     "spring.event-emitter.topic-names=" + EVENT_DESTINATION,
                     "spring.cloud.stream.bindings.consumeTestEvent-in-0.group=event-emitter",
                     "spring.cloud.stream.bindings.consumeTestEvent-in-0.destination=" + EVENT_DESTINATION,
-                    "spring.cloud.stream.function.definition=consumeTestEvent",
+                    "spring.cloud.function.definition=consumeTestEvent",
                     "backbase.event-emitter.custom-header-pairs[0].http=x-lob",
                     "backbase.event-emitter.custom-header-pairs[0].event=bbLineOfBusiness",
                     "backbase.event-emitter.custom-header-pairs[1].http=customerCategory",
