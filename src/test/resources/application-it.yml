@@ -1,0 +1,9 @@
+spring:
+  main:
+    cloud-platform: NONE
+
+logging:
+  level:
+    root: INFO
+    com:
+      backbase: DEBUG

@@ -1,0 +1,21 @@
+server:
+  port: 8081
+
+spring:
+  activemq:
+    broker-url: tcp://localhost:61616
+    user: admin
+    password: admin
+
+backbase:
+  event-emitter:
+    #comma-separated list topic names
+    topic-names: com.backbase.dbs.messages.pandp.event.spec.v4.MessageReceivedEvent
+
+logging:
+  level:
+    com:
+      backbase: DEBUG
+    org:
+      springframework:
+        cloud: DEBUG

@@ -1,7 +1,7 @@
 package com.backbase.eo.testing.events.emitter;
 
 import com.backbase.buildingblocks.backend.communication.context.OriginatorContext;
-import  com.backbase.buildingblocks.backend.communication.event.EnvelopedEvent;
+import com.backbase.buildingblocks.backend.communication.event.EnvelopedEvent;
 import com.backbase.buildingblocks.backend.communication.event.proxy.EventBus;
 import com.backbase.buildingblocks.persistence.model.Event;
 import com.backbase.buildingblocks.presentation.errors.BadRequestException;
@@ -19,7 +19,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 import lombok.RequiredArgsConstructor;
 import org.reflections.Reflections;

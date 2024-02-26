@@ -5,16 +5,17 @@
     <parent>
         <groupId>com.backbase.buildingblocks</groupId>
         <artifactId>service-sdk-starter-core</artifactId>
-        <version>15.1.0</version>
+        <version>16.1.5</version>
     </parent>
 
     <groupId>com.backbase.testing</groupId>
     <artifactId>event-emitter</artifactId>
-    <version>1.6.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <version>1.7.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <name>Backbase :: Testing Components :: Events Emitter</name>
 
     <properties>
+        <archunit.skip>true</archunit.skip>
         <action-service.version>1.1.5</action-service.version>
 
         <!--EVENTS-->
@@ -25,7 +26,7 @@
         <payment-order-service.version>1.3.92</payment-order-service.version>
         <contact-manager.version>2.0.6</contact-manager.version>
         <pocket-tailor.version>0.5</pocket-tailor.version>
-        <audit-spec-version>1.0.47</audit-spec-version>
+        <audit-spec.version>7.0.0</audit-spec.version>
 
         <java.version>17</java.version>
         <api.target>${project.build.directory}/downloaded-api</api.target>
@@ -42,10 +43,12 @@
         <apache-commons-beanutils.version>1.9.4</apache-commons-beanutils.version>
         <hamcrest-date.version>2.0.7</hamcrest-date.version>
         <dbunit.version>2.6.0</dbunit.version>
-        <boat.version>0.14.0</boat.version>
-        <swagger-annotations.version>1.6.2</swagger-annotations.version>
+        <boat.version>0.17.20</boat.version>
+        <swagger-core-annotations.version>2.2.15</swagger-core-annotations.version>
         <jackson-databind-nullable.version>0.2.1</jackson-databind-nullable.version>
         <wagon.plugin.version>2.0.0</wagon.plugin.version>
+        <testcontainers.version>1.17.6</testcontainers.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
 
         <sonar.jacoco.reportPaths>target/coverage-reports/jacoco.exec,target/coverage-reports/jacoco-it.exec</sonar.jacoco.reportPaths>
         <sonar.sources>src/main/java,pom.xml</sonar.sources>
@@ -64,7 +67,7 @@
             <dependency>
                 <groupId>org.testcontainers</groupId>
                 <artifactId>testcontainers-bom</artifactId>
-                <version>1.17.5</version>
+                <version>${testcontainers.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -75,6 +78,10 @@
         <dependency>
             <groupId>com.backbase.buildingblocks</groupId>
             <artifactId>events</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.backbase.buildingblocks</groupId>
+            <artifactId>spring-cloud-stream-binder-jms-activemq</artifactId>
         </dependency>
         <dependency>
             <groupId>com.backbase.buildingblocks</groupId>
@@ -121,9 +128,9 @@
             <artifactId>guava</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.swagger</groupId>
+            <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-annotations</artifactId>
-            <version>${swagger-annotations.version}</version>
+            <version>${swagger-core-annotations.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openapitools</groupId>
@@ -149,6 +156,10 @@
             <version>${mapstruct.version}</version>
         </dependency>
         <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -160,7 +171,6 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.8.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -220,6 +230,11 @@
                             <artifactId>service-sdk-starter-mapping</artifactId>
                             <version>${project.parent.version}</version>
                         </path>
+                        <dependency>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>${lombok-mapstruct-binding.version}</version>
+                        </dependency>
                     </annotationProcessorPaths>
                     <compilerArgs>
                         <compilerArg>-Amapstruct.unmappedTargetPolicy=ERROR</compilerArg>
@@ -319,9 +334,11 @@
                                 <artifactItem>
                                     <groupId>com.backbase.dbs.audit</groupId>
                                     <artifactId>audit-spec</artifactId>
-                                    <type>jar</type>
-                                    <version>${audit-spec-version}</version>
-                                    <outputDirectory>target/unpacked-specs/audit-spec</outputDirectory>
+                                    <version>${audit-spec.version}</version>
+                                    <type>zip</type>
+                                    <classifier>events</classifier>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}/unpacked-specs/audit-spec/events</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
@@ -437,16 +454,17 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>audit-events</id>
+                        <id>audit-spec</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>events-generation</goal>
                         </goals>
                         <configuration>
+                            <inputFile>target/unpacked-specs/audit-spec/events/</inputFile>
                             <outputFile>target/generated-sources/</outputFile>
-                            <inputFile>target/unpacked-specs/audit-spec/events</inputFile>
-                            <packageName>audit.persistence</packageName>
                             <packageVersion>1</packageVersion>
+                            <packageName>audit.persistence</packageName>
+                            <groupNameStrategy>APP_NAME</groupNameStrategy>
                         </configuration>
                     </execution>
                 </executions>
