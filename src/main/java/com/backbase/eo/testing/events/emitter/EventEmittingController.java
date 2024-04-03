@@ -6,6 +6,7 @@ import com.backbase.buildingblocks.backend.communication.event.proxy.EventBus;
 import com.backbase.buildingblocks.persistence.model.Event;
 import com.backbase.buildingblocks.presentation.errors.BadRequestException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -19,9 +20,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import jakarta.annotation.Nullable;
-
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -34,10 +34,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class EventEmittingController {
 
     private final EventBus eventBus;
-    private final ObjectMapper mapper;
+    private final ObjectMapper objectMapper;
 
     private static final int BATCH_SIZE = 10000;
     private static final int USERS_COUNT = 20;
@@ -97,12 +98,12 @@ public class EventEmittingController {
             .flatMap(clazz -> {
                 try {
                     if (body != null) {
-                        return Optional.of(mapper.readValue(body, clazz));
+                        return Optional.of(objectMapper.readValue(body, clazz));
                     } else {
                         return Optional.of(createAndFill(clazz));
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.error("Serialize error", e);
                     return Optional.empty();
                 }
             }).orElseThrow(() -> new BadRequestException("Unknown event"));
