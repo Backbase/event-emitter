@@ -5,12 +5,12 @@
     <parent>
         <groupId>com.backbase.buildingblocks</groupId>
         <artifactId>service-sdk-starter-core</artifactId>
-        <version>16.1.5</version>
+        <version>17.0.0</version>
     </parent>
 
     <groupId>com.backbase.testing</groupId>
     <artifactId>event-emitter</artifactId>
-    <version>1.7.0-SNAPSHOT</version>
+    <version>1.8.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Backbase :: Testing Components :: Events Emitter</name>
 
@@ -28,7 +28,7 @@
         <pocket-tailor.version>0.5</pocket-tailor.version>
         <audit-spec.version>7.0.0</audit-spec.version>
 
-        <java.version>17</java.version>
+        <java.version>21</java.version>
         <api.target>${project.build.directory}/downloaded-api</api.target>
         <specs.repo.url>https://repo.backbase.com/specs/</specs.repo.url>
         <json-path-assert.version>2.2.0</json-path-assert.version>
@@ -43,8 +43,8 @@
         <apache-commons-beanutils.version>1.9.4</apache-commons-beanutils.version>
         <hamcrest-date.version>2.0.7</hamcrest-date.version>
         <dbunit.version>2.6.0</dbunit.version>
-        <boat.version>0.17.20</boat.version>
-        <swagger-core-annotations.version>2.2.15</swagger-core-annotations.version>
+        <boat.version>0.17.30</boat.version>
+        <swagger-core-annotations.version>2.2.19</swagger-core-annotations.version>
         <jackson-databind-nullable.version>0.2.1</jackson-databind-nullable.version>
         <wagon.plugin.version>2.0.0</wagon.plugin.version>
         <testcontainers.version>1.17.6</testcontainers.version>
@@ -477,6 +477,31 @@
                         <java.locale.providers>COMPAT</java.locale.providers>
                     </systemPropertyVariables>
                 </configuration>
+            </plugin>
+            <!--Below plugin is added as a temporary fix to solve events javaType issue; this can be removed once
+            actions-reactive-spec repo is migrated to SSDK 16x-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>${maven-antrun-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>replace-javaType</id>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <target name="replace">
+                                <replaceregexp
+                                    file="target/unpacked-specs/actions-reactive-spec/account-balance-changed-event.json"
+                                    match="&quot;javaType&quot;: &quot;java\.math\.BigDecimal&quot;"
+                                    replace="&quot;existingJavaType&quot;: &quot;java\.math\.BigDecimal&quot;"
+                                    flags="g"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

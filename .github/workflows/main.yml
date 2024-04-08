@@ -10,6 +10,8 @@ jobs:
   verify:
     name: Maven Verify
     uses: backbase/workflows/.github/workflows/maven-verify.yml@main
+    with:
+      java-version: "21"
     secrets:
       maven-username: ${{ secrets.REPO_USERNAME }}
       maven-password: ${{ secrets.REPO_PASSWORD }}
