@@ -3,9 +3,9 @@ package com.backbase.eo.testing.events.emitter;
 import static java.util.Collections.emptyEnumeration;
 import static java.util.Optional.ofNullable;
 
-import com.backbase.buildingblocks.backend.communication.context.OriginatorContext;
 import com.backbase.buildingblocks.backend.communication.event.EnvelopedEvent;
 import com.backbase.buildingblocks.backend.communication.event.scs.EventMessageProcessor;
+import com.backbase.buildingblocks.backend.internalrequest.UserRequestContext;
 import com.backbase.eo.testing.events.configuration.EventEmitterConfiguration;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -56,12 +56,12 @@ public class RawEmittingController {
     )
     public ResponseEntity<Void> emitEvent(HttpServletRequest request, @RequestBody RawEventPayload payload) {
 
-        OriginatorContext originatorContext = new OriginatorContext();
-        originatorContext.setRequestUuid(payload.getRequestId());
-        originatorContext.setCreationTime(payload.getCreationTime());
+        UserRequestContext userRequestContext = new UserRequestContext();
+        userRequestContext.setRequestUuid(payload.getRequestId());
+        userRequestContext.setRequestTime(payload.getCreationTime());
 
         EnvelopedEvent envelopedEvent = new EnvelopedEvent();
-        envelopedEvent.setOriginatorContext(originatorContext);
+        envelopedEvent.setUserRequestContext(userRequestContext);
         envelopedEvent.setEvent(payload.getBody());
 
         MessageBuilder eventMessageBuilder = MessageBuilder.withPayload(payload.getBody()).setHeader("bbEventType", payload.getEventType());

@@ -1,8 +1,8 @@
 package com.backbase.eo.testing.events.emitter;
 
-import com.backbase.buildingblocks.backend.communication.context.OriginatorContext;
 import com.backbase.buildingblocks.backend.communication.event.EnvelopedEvent;
 import com.backbase.buildingblocks.backend.communication.event.proxy.EventBus;
+import com.backbase.buildingblocks.backend.internalrequest.UserRequestContext;
 import com.backbase.buildingblocks.persistence.model.Event;
 import com.backbase.buildingblocks.presentation.errors.BadRequestException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -88,9 +88,9 @@ public class EventEmittingController {
         Reflections reflections = new Reflections("com.backbase");
         Set<Class<? extends Event>> availableEvents = reflections.getSubTypesOf(Event.class);
 
-        OriginatorContext originatorContext = new OriginatorContext();
-        originatorContext.setRequestUuid(requestUuid);
-        originatorContext.setCreationTime(Instant.EPOCH.toEpochMilli());
+        UserRequestContext userRequestContext = new UserRequestContext();
+        userRequestContext.setRequestUuid(requestUuid);
+        userRequestContext.setRequestTime(Instant.EPOCH.toEpochMilli());
 
         Object testObject = availableEvents.stream()
             .filter(clazz -> clazz.getName().equalsIgnoreCase(eventId))
@@ -109,7 +109,7 @@ public class EventEmittingController {
             }).orElseThrow(() -> new BadRequestException("Unknown event"));
 
         EnvelopedEvent envelopedEvent = new EnvelopedEvent();
-        envelopedEvent.setOriginatorContext(originatorContext);
+        envelopedEvent.setUserRequestContext(userRequestContext);
         envelopedEvent.setEvent(testObject);
 
         return envelopedEvent;
